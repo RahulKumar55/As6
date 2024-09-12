@@ -42,6 +42,7 @@ module.exports.registerUser = function (userData) {
             bcrypt.hash(userData.password, 10).then(hash => {
 
                 userData.password = hash;
+                userData.userName = userData.userName?.toLowerCase();
 
                 let newUser = new User(userData);
 
@@ -62,7 +63,7 @@ module.exports.registerUser = function (userData) {
 module.exports.checkUser = function (userData) {
     return new Promise(function (resolve, reject) {
 
-        User.findOne({ userName: userData.userName })
+        User.findOne({ userName: userData.userName?.toLowerCase() })
             .exec()
             .then(user => {
                 bcrypt.compare(userData.password, user.password).then(res => {
